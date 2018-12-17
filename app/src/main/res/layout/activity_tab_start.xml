@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/app_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@drawable/toolbar_background"
+        android:elevation="4dp"
+        app:contentInsetStart="16dp"
+        app:title="@string/app_name"
+        app:titleTextColor="@android:color/white" />
+
+    <RelativeLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_toolBar">
+
+        <include layout="@layout/layout_top_tabnav" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/view_pager_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tab_layout">
+
+        <include layout="@layout/layout_center_viewpager" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/dialog_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_bottom"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="삭제 이메일 요청"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/dialog_send_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_top"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/receiver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="받는 사람: pornhub.com" />
+
+        <TextView
+            android:id="@+id/sender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="보내는 사람: www.spresto.net" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/dialog_email_format"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_send_name"
+        android:layout_margin="7dp"
+        android:background="@drawable/dialog_square">
+
+        <TextView
+            android:id="@+id/dialog_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="@string/send_email_format"
+            android:textColor="@color/black" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/dialog_check_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_email_format"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="위 내용으로 삭제요청을 보내시겠습니까?"
+        android:textColor="@color/black"
+        android:textSize="18dp" />
+
+    <Button
+        android:id="@+id/dialog_send_email_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_check_msg"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/upload_button_shape"
+        android:text="이메일 전송"
+        android:textColor="@color/white"
+        android:textSize="17dp" />
+</RelativeLayout>
