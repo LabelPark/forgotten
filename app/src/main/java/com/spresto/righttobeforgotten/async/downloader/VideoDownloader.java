@@ -30,13 +30,15 @@ import java.net.URL;
     // 4. Request file and download byte
 
 public class VideoDownloader extends AsyncTask<Void, String, String> {
+    private static String TAG = VideoDownloader.class.getSimpleName();
+
     public interface onResult{
         void onResult(String filePath);
     }
 
     private onResult onResult;
 
-    private static String TAG = VideoDownloader.class.getSimpleName();
+
     private Context context;
     private String site_url, site;
     private ProgressDialog dialog;

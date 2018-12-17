@@ -55,11 +55,11 @@ public class AudioExtractor extends AsyncTask<String, Integer, String> {
         videoFileList.add(this.upload_video_filePath); videoFileList.add(this.download_video_filePath);
     }
 
-    public AudioExtractor(Context context, String videoFilePath) {
-        this.context = context;
-        //this.file_path = Environment.getExternalStorageDirectory().getPath() + "/Pictures/" +"/viToAudio/" + System.currentTimeMillis() + ".mp3";
-        this.videoFilePath = videoFilePath;
-    }
+//    public AudioExtractor(Context context, String videoFilePath) {
+//        this.context = context;
+//        //this.file_path = Environment.getExternalStorageDirectory().getPath() + "/Pictures/" +"/viToAudio/" + System.currentTimeMillis() + ".mp3";
+//        this.videoFilePath = videoFilePath;
+//    }
 
     @Override
     protected String doInBackground(String... strings) {
