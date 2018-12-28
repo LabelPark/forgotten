@@ -128,6 +128,18 @@
                 android:text="오디오 분석 수행"
                 android:textColor="@color/black"
                 android:textSize="17dp"/>
+
+            <Button
+                android:id="@+id/tensorButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/audioAnalysisButton"
+                android:background="@drawable/audio_analysis_button"
+                android:layout_marginTop="5dp"
+                android:text="TensorFlow"
+                android:textColor="@color/black"
+                android:textSize="17dp"
+                />
         </RelativeLayout>
 
         <RelativeLayout

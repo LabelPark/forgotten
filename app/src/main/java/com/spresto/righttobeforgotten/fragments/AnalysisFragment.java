@@ -71,13 +71,18 @@ import static android.app.Activity.RESULT_OK;
 
 public class AnalysisFragment extends android.support.v4.app.Fragment {
 
-    @BindView(R.id.refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.mainScrollView) ScrollView mainScrollView;
-    @BindView(R.id.next_site_button) Button nextSiteButton;
-    @BindView(R.id.left_button) Button leftButton;
-    @BindView(R.id.right_button) Button rightButton;
-    @BindView(R.id.testButton) Button testButton;
-
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.mainScrollView)
+    ScrollView mainScrollView;
+    @BindView(R.id.next_site_button)
+    Button nextSiteButton;
+    @BindView(R.id.left_button)
+    Button leftButton;
+    @BindView(R.id.right_button)
+    Button rightButton;
+    @BindView(R.id.testButton)
+    Button testButton;
 
 
     private final static String TAG = AnalysisFragment.class.getSimpleName();
@@ -172,37 +177,36 @@ public class AnalysisFragment extends android.support.v4.app.Fragment {
         );
         dbHelper.testDB();
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                siteCount = 0;
-                siteIndex = 0;
-                getFramesMaxCount = 0;
-                max_multiple_count = 1;
-                count = 0;
-                isThreadSleep = false;
-                videoUri = null;
+        swipeRefreshLayout.setOnRefreshListener(() -> {
 
-                if (mArrayList != null)
-                    mArrayList.clear();
-                if (countList != null)
-                    countList.clear();
-                if (wholeCountList != null)
-                    wholeCountList.clear();
-                if (_lists != null)
-                    _lists.clear();
-                if (default_site != null)
-                    default_site.clear();
-                if (siteMap != null)
-                    siteMap.clear();
+            siteCount = 0;
+            siteIndex = 0;
+            getFramesMaxCount = 0;
+            max_multiple_count = 1;
+            count = 0;
+            isThreadSleep = false;
+            videoUri = null;
 
-                leftButton.setText(getString(R.string.upload));
-                rightButton.setVisibility(View.GONE);
-                nextSiteButton.setVisibility(View.GONE);
+            if (mArrayList != null)
+                mArrayList.clear();
+            if (countList != null)
+                countList.clear();
+            if (wholeCountList != null)
+                wholeCountList.clear();
+            if (_lists != null)
+                _lists.clear();
+            if (default_site != null)
+                default_site.clear();
+            if (siteMap != null)
+                siteMap.clear();
 
-                swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getContext(), "초기화 완료", Toast.LENGTH_SHORT).show();
-            }
+            leftButton.setText(getString(R.string.upload));
+            rightButton.setVisibility(View.GONE);
+            nextSiteButton.setVisibility(View.GONE);
+
+            swipeRefreshLayout.setRefreshing(false);
+            Toast.makeText(getContext(), "초기화 완료", Toast.LENGTH_SHORT).show();
+
         });
 
         String folderName = Environment.getExternalStorageDirectory() + File.separator + "audioTest";
@@ -264,7 +268,7 @@ public class AnalysisFragment extends android.support.v4.app.Fragment {
                     } else if (leftButton.getText().toString().equals(getString(R.string.analysis_result_check))) {
                         Intent intent = new Intent(getContext(), CompareActivity.class);
                         intent.putExtra("site_url", currentSite);
-                        intent.putExtra("upload_url",filePath);
+                        intent.putExtra("upload_url", filePath);
                         startActivity(intent);
                     }
                 }
@@ -439,7 +443,7 @@ public class AnalysisFragment extends android.support.v4.app.Fragment {
                     Intent intent = new Intent(getContext(), CompareActivity.class);
                     //intent.putExtra("site_url", default_site.get(siteIndex - 1));
                     intent.putExtra("site_url", currentSite);
-                    intent.putExtra("upload_url",filePath);
+                    intent.putExtra("upload_url", filePath);
                     startActivity(intent);
 
                 } else {
@@ -448,61 +452,58 @@ public class AnalysisFragment extends android.support.v4.app.Fragment {
             }
         };
 
-        doHistogramTaskListener = new DoHistogramTaskListener() {
-            @Override
-            public void onHistogramCompleteListener(ResultModel model) {
-                _lists.add(model);
-                count++;
-                //mProgressDialog.setMessage("분석 대상: " + currentSite + "\n" + "진행상황: " + countList.size() + "개의 영상중에서 " + count + "개 분석 완료");
-                gifProgressDialog.setStateMessage("분석 대상: " + currentSite + "\n" + "진행상황: " + countList.size() + "개의 영상중에서 " + count + "개 분석 완료");
-                Log.e(TAG, "count: " + count);
-                Log.e(TAG, "_lists.size(): " + _lists.size());
-                Log.e(TAG, "countList.size(): " + countList.size());
-                if (_lists.size() == countList.size()) {
-                    Comparator comparator = new Comparator();
-                    Collections.sort(_lists, comparator);
-                    for (int j = 0; j < _lists.size(); j++) {
-                        _lists.get(j).setRanking(String.valueOf(j + 1));
-                    }
-                    //mProgressDialog.dismiss();
-                    gifProgressDialog.hideDialog();
-//                    userVideoUploadButton.setText(getString(R.string.analysis_result_check));
-                    rightButton.setVisibility(View.VISIBLE);
-                    rightButton.setText(getString(R.string.next_site_button));
-                    leftButton.setText(getString(R.string.analysis_result_check));
-                    Toast.makeText(getContext(), "분석 완료!", Toast.LENGTH_SHORT).show();
-                    // key.size() > 1 : visible
-                    if (default_site.size() > 1) {
-                        nextSiteButton.setVisibility(View.VISIBLE);
-                    }
-                    // 분석 완료 되면 참조 인덱스 ++
-                    //siteIndex++;
-
-                    /////////////////////////////////////////////////////////////////////////////////
-                    ////////// Histogram 작업 까지 완료 된 후, List, Adapter 등의 setting //////////////
-                    /////////////////////////////////////////////////////////////////////////////////
-
-                    MyApplication application = (MyApplication) getActivity().getApplicationContext();
-                    application.setLists(_lists);
-                    Log.e(TAG, "app lists: " + application.getLists().size());
-
-                    Intent intent = new Intent(getContext(), CompareActivity.class);
-                    //intent.putExtra("site_url", default_site.get(siteIndex - 1));
-                    intent.putExtra("site_url", currentSite);
-                    intent.putExtra("upload_url",filePath);
-                    startActivity(intent);
-
-                } else {
-                    Log.e(TAG, "Not Enough!!");
+        doHistogramTaskListener = (ResultModel model) -> {
+            _lists.add(model);
+            count++;
+            //mProgressDialog.setMessage("분석 대상: " + currentSite + "\n" + "진행상황: " + countList.size() + "개의 영상중에서 " + count + "개 분석 완료");
+            gifProgressDialog.setStateMessage("분석 대상: " + currentSite + "\n" + "진행상황: " + countList.size() + "개의 영상중에서 " + count + "개 분석 완료");
+            Log.e(TAG, "count: " + count);
+            Log.e(TAG, "_lists.size(): " + _lists.size());
+            Log.e(TAG, "countList.size(): " + countList.size());
+            if (_lists.size() == countList.size()) {
+                Comparator comparator = new Comparator();
+                Collections.sort(_lists, comparator);
+                for (int j = 0; j < _lists.size(); j++) {
+                    _lists.get(j).setRanking(String.valueOf(j + 1));
                 }
+                //mProgressDialog.dismiss();
+                gifProgressDialog.hideDialog();
+//                    userVideoUploadButton.setText(getString(R.string.analysis_result_check));
+                rightButton.setVisibility(View.VISIBLE);
+                rightButton.setText(getString(R.string.next_site_button));
+                leftButton.setText(getString(R.string.analysis_result_check));
+                Toast.makeText(getContext(), "분석 완료!", Toast.LENGTH_SHORT).show();
+                // key.size() > 1 : visible
+                if (default_site.size() > 1) {
+                    nextSiteButton.setVisibility(View.VISIBLE);
+                }
+                // 분석 완료 되면 참조 인덱스 ++
+                //siteIndex++;
 
+                /////////////////////////////////////////////////////////////////////////////////
+                ////////// Histogram 작업 까지 완료 된 후, List, Adapter 등의 setting //////////////
+                /////////////////////////////////////////////////////////////////////////////////
+
+                MyApplication application = (MyApplication) getActivity().getApplicationContext();
+                application.setLists(_lists);
+                Log.e(TAG, "app lists: " + application.getLists().size());
+
+                Intent intent = new Intent(getContext(), CompareActivity.class);
+                //intent.putExtra("site_url", default_site.get(siteIndex - 1));
+                intent.putExtra("site_url", currentSite);
+                intent.putExtra("upload_url", filePath);
+                startActivity(intent);
+
+            } else {
+                Log.e(TAG, "Not Enough!!");
             }
+
         };
         return view;
     }
 
     @OnClick(R.id.testButton)
-    public void onTestButtonClick(View view){
+    public void onTestButtonClick(View view) {
         /**
          * 16-bits wav file 해당
          */
@@ -526,38 +527,37 @@ public class AnalysisFragment extends android.support.v4.app.Fragment {
             e.printStackTrace();
         }
 
-        if (getFrameGainsForCompare == null || getFrameGainsForReference == null){
+        if (getFrameGainsForCompare == null || getFrameGainsForReference == null) {
             Log.e(TAG, "FAIL!!");
             return;
         }
 
-        Log.e(TAG, "getFrameGainsForCompare.length : " + getFrameGainsForCompare.length+" S "+cWAVCompare.getSampleRate()+" C"+cWAVCompare.getChannels());
-        Log.e(TAG, "getFrameGainsForReference.length: " + getFrameGainsForReference.length+" S "+cWAVReference.getSampleRate()+" C"+cWAVReference.getChannels());
+        Log.e(TAG, "getFrameGainsForCompare.length : " + getFrameGainsForCompare.length + " S " + cWAVCompare.getSampleRate() + " C" + cWAVCompare.getChannels());
+        Log.e(TAG, "getFrameGainsForReference.length: " + getFrameGainsForReference.length + " S " + cWAVReference.getSampleRate() + " C" + cWAVReference.getChannels());
         if (getFrameGainsForCompare.length < getFrameGainsForReference.length) {
             CompareWAV cWAV = new CompareWAV(getFrameGainsForReference, getFrameGainsForCompare);
             ArrayList<Integer> frames = new ArrayList<>(cWAV.CompareExecute());
 
             ArrayList<Float> milliseconds = new ArrayList<>();
-            for (int frameIdx =0; frameIdx<frames.size(); frameIdx++){
+            for (int frameIdx = 0; frameIdx < frames.size(); frameIdx++) {
                 milliseconds.add(cWAVReference.convertToMilliseconds(frames.get(frameIdx)));
             }
 
-            Log.e(TAG, "frames.size() : "+milliseconds.size());
+            Log.e(TAG, "frames.size() : " + milliseconds.size());
             if (frames.size() > 0)
                 Log.e(TAG, "frames toString() 1: " + milliseconds.toString());
             else
                 Log.e(TAG, "##FAIL##");
-        }
-        else {
+        } else {
             CompareWAV cWAV = new CompareWAV(getFrameGainsForCompare, getFrameGainsForReference);
             ArrayList<Integer> frames = new ArrayList<>(cWAV.CompareExecute());
 
             ArrayList<Float> milliseconds = new ArrayList<>();
-            for (int frameIdx =0; frameIdx<frames.size(); frameIdx++){
+            for (int frameIdx = 0; frameIdx < frames.size(); frameIdx++) {
                 milliseconds.add(cWAVCompare.convertToMilliseconds(frames.get(frameIdx)));
             }
 
-            Log.e(TAG, "frames.size() : "+milliseconds.size());
+            Log.e(TAG, "frames.size() : " + milliseconds.size());
             if (frames.size() > 0)
                 Log.e(TAG, "frames toString() : " + milliseconds.toString());
             else
